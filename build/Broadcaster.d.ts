@@ -12,6 +12,7 @@ export interface Subscription<T, MetaT> {
 declare type Identifier = string | null;
 export declare type ChangeInfo<T> = {
     change: Spec<T>;
+    error?: undefined;
 } | {
     change?: undefined;
     error: string;

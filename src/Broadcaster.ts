@@ -18,6 +18,7 @@ type Identifier = string | null;
 
 export type ChangeInfo<T> = {
   change: Spec<T>;
+  error?: undefined;
 } | {
   change?: undefined;
   error: string;
