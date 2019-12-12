@@ -73,7 +73,7 @@ const websocketHandler = <T>(
     if (permission === ReadOnly) {
       // this is validated properly later by the Broadcaster,
       // but we fail-fast here in this specific case.
-      res.sendError(403, 4403, READ_ONLY_ERROR);
+      ws.send(JSON.stringify({ error: READ_ONLY_ERROR }));
       return;
     }
 

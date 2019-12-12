@@ -5,9 +5,19 @@ import websocketHandler from './websocketHandler';
 import InMemoryModel from './model/InMemoryModel';
 import Broadcaster from './Broadcaster';
 import ReadWrite from './permission/ReadWrite';
+import ReadOnly from './permission/ReadOnly';
+import ReadWriteStruct from './permission/ReadWriteStruct';
 
 interface TestT {
   foo: string;
+}
+
+function validateTestT(x: unknown): TestT {
+  const test = x as TestT;
+  if (test.foo === 'denied') {
+    throw new Error('Test rejection');
+  }
+  return test;
 }
 
 class Sentinel {
@@ -34,7 +44,7 @@ describe('websocketHandler', () => {
 
   beforeEach((done) => {
     app = new WebSocketExpress();
-    model = new InMemoryModel();
+    model = new InMemoryModel(validateTestT);
     broadcaster = new Broadcaster<TestT>(model);
     server = app.listen(0, 'localhost', done);
 
@@ -70,6 +80,39 @@ describe('websocketHandler', () => {
       .expectJson()
       .sendJson({ change: { foo: { $set: 'v2' } } })
       .expectJson({ change: { foo: { $set: 'v2' } } });
+  });
+
+  it('rejects changes in read-only mode', async () => {
+    const handler = websocketHandler(broadcaster);
+    app.ws('/:id', handler((req) => req.params.id, () => ReadOnly));
+
+    await request(server)
+      .ws('/a')
+      .expectJson()
+      .sendJson({ change: { foo: { $set: 'v2' } } })
+      .expectJson({ error: 'Cannot modify data' });
+  });
+
+  it('rejects changes forbidden by permissions', async () => {
+    const handler = websocketHandler(broadcaster);
+    app.ws('/:id', handler((req) => req.params.id, () => new ReadWriteStruct(['foo'])));
+
+    await request(server)
+      .ws('/a')
+      .expectJson()
+      .sendJson({ change: { foo: { $set: 'v2' } } })
+      .expectJson({ error: 'Cannot edit field foo' });
+  });
+
+  it('rejects changes forbidden by model', async () => {
+    const handler = websocketHandler(broadcaster);
+    app.ws('/:id', handler((req) => req.params.id, () => ReadWrite));
+
+    await request(server)
+      .ws('/a')
+      .expectJson()
+      .sendJson({ change: { foo: { $set: 'denied' } } })
+      .expectJson({ error: 'Test rejection' });
   });
 
   it('reflects id field if provided', async () => {
