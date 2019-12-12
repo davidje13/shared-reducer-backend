@@ -52,6 +52,7 @@ module.exports = {
           'import/no-extraneous-dependencies': ['error', {
             'peerDependencies': true,
           }],
+          'import/extensions': ['error', 'never'],
         },
         baseConfig: {
           overrides: [{
