@@ -69,15 +69,10 @@ export default class Broadcaster<T> {
         initialData = null; // GC
         return data;
       },
-      send: async (
+      send: (
         change: Spec<T>,
         meta?: MetaT,
-      ): Promise<void> => {
-        if (permission.validateWriteSpec) {
-          permission.validateWriteSpec(change);
-        }
-        await this.internalQueueChange(id, change, permission, myId, meta);
-      },
+      ): Promise<void> => this.internalQueueChange(id, change, permission, myId, meta),
       close: async (): Promise<void> => {
         await this.subscribers.remove(id, eventHandler);
       },
@@ -103,6 +98,9 @@ export default class Broadcaster<T> {
     try {
       if (!original) {
         throw new Error('Deleted');
+      }
+      if (permission.validateWriteSpec) {
+        permission.validateWriteSpec(change);
       }
       const updated = update(original, change);
       const validatedUpdate = this.model.validate(updated);

@@ -5,8 +5,7 @@ import { Request } from 'express';
 import { Params, ParamsDictionary } from 'express-serve-static-core';
 import { Spec } from 'json-immutability-helper';
 import Broadcaster, { ChangeInfo } from './Broadcaster';
-import Permission, { PermissionError } from './permission/Permission';
-import ReadOnly, { READ_ONLY_ERROR } from './permission/ReadOnly';
+import Permission from './permission/Permission';
 
 export const PING = 'P';
 export const PONG = 'p';
@@ -70,24 +69,12 @@ const websocketHandler = <T>(
       ws.send(PONG);
       return;
     }
-    if (permission === ReadOnly) {
-      // this is validated properly later by the Broadcaster,
-      // but we fail-fast here in this specific case.
-      ws.send(JSON.stringify({ error: READ_ONLY_ERROR }));
-      return;
-    }
 
     const request = unpackMessage(msg);
 
     try {
       res.beginTransaction();
       subscription.send(request.change as Spec<T>, request.id);
-    } catch (e) {
-      if (e instanceof PermissionError) {
-        res.sendError(403, 4403, e.message);
-      } else {
-        throw e;
-      }
     } finally {
       res.endTransaction();
     }
