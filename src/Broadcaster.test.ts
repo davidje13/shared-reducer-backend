@@ -1,5 +1,5 @@
 import { Spec } from 'json-immutability-helper';
-import Broadcaster, { ChangeInfo } from './Broadcaster';
+import Broadcaster, { ChangeInfo, Subscription } from './Broadcaster';
 import InMemoryModel from './model/InMemoryModel';
 
 interface TestT {
@@ -31,14 +31,22 @@ describe('Broadcaster', () => {
     broadcaster = new Broadcaster<TestT>(model);
   });
 
+  async function subscribe<MetaT>(
+    id: string,
+    onChange: (message: ChangeInfo<TestT>, meta?: MetaT) => void,
+  ): Promise<Subscription<TestT, MetaT>> {
+    const subscription = await broadcaster.subscribe(id, onChange);
+    if (!subscription) {
+      throw new Error('Failed to subscribe');
+    }
+    return subscription;
+  }
+
   it('notifies subscribers of updates', async () => {
     const changeListener = jest.fn<void, ChangeParams>();
 
     model.set('a', { foo: 'v1' });
-    const subscription = await broadcaster.subscribe('a', changeListener);
-    if (!subscription) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription = await subscribe('a', changeListener);
 
     await broadcaster.update('a', { foo: { $set: 'v2' } });
 
@@ -66,10 +74,7 @@ describe('Broadcaster', () => {
     const changeListener = jest.fn<void, ChangeParams>();
 
     model.set('a', { foo: 'v1' });
-    const subscription = await broadcaster.subscribe('a', changeListener);
-    if (!subscription) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription = await subscribe('a', changeListener);
 
     expect(subscription.getInitialData()).toEqual({ foo: 'v1' });
 
@@ -83,16 +88,10 @@ describe('Broadcaster', () => {
     model.set('a', { foo: 'v1' });
 
     const changeListener1 = jest.fn<void, ChangeParams>();
-    const subscription1 = await broadcaster.subscribe('a', changeListener1);
-    if (!subscription1) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription1 = await subscribe('a', changeListener1);
 
     const changeListener2 = jest.fn<void, ChangeParams>();
-    const subscription2 = await broadcaster.subscribe('a', changeListener2);
-    if (!subscription2) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription2 = await subscribe('a', changeListener2);
 
     await subscription1.send({ foo: { $set: 'v2' } }, 20);
 
@@ -113,16 +112,10 @@ describe('Broadcaster', () => {
     model.set('a', { foo: 'v1' });
 
     const changeListener1 = jest.fn<void, ChangeParams>();
-    const subscription1 = await broadcaster.subscribe('a', changeListener1);
-    if (!subscription1) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription1 = await subscribe('a', changeListener1);
 
     const changeListener2 = jest.fn<void, ChangeParams>();
-    const subscription2 = await broadcaster.subscribe('a', changeListener2);
-    if (!subscription2) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription2 = await subscribe('a', changeListener2);
 
     await subscription1.close();
 
@@ -137,16 +130,10 @@ describe('Broadcaster', () => {
     model.set('a', { foo: 'v1' });
 
     const changeListener1 = jest.fn<void, ChangeParams>();
-    const subscription1 = await broadcaster.subscribe('a', changeListener1);
-    if (!subscription1) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription1 = await subscribe('a', changeListener1);
 
     const changeListener2 = jest.fn<void, ChangeParams>();
-    const subscription2 = await broadcaster.subscribe('a', changeListener2);
-    if (!subscription2) {
-      throw new Error('Failed to subscribe');
-    }
+    const subscription2 = await subscribe('a', changeListener2);
 
     await subscription1.send({ $set: 'eek' } as Spec<TestT>, 20);
 
