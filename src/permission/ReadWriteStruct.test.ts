@@ -15,18 +15,18 @@ describe('ReadWriteStruct', () => {
       .not.toThrow();
   });
 
-  it('rejects additional fields', () => {
+  it('rejects adding read-only fields', () => {
     const oldValue = { foo: 'a' };
-    const newValue = { foo: 'a', bar: 'b' };
+    const newValue = { foo: 'a', blocked: 'b' };
     expect(() => permission.validateWrite(newValue, oldValue))
-      .toThrow('Cannot add field bar');
+      .toThrow('Cannot add field blocked');
   });
 
-  it('rejects removing fields', () => {
-    const oldValue = { foo: 'a' };
+  it('rejects removing read-only fields', () => {
+    const oldValue = { blocked: 'a' };
     const newValue = { };
     expect(() => permission.validateWrite(newValue, oldValue))
-      .toThrow('Cannot remove field foo');
+      .toThrow('Cannot remove field blocked');
   });
 
   it('rejects editing read-only fields', () => {
@@ -39,6 +39,20 @@ describe('ReadWriteStruct', () => {
   it('allows changes which do no modify blocked fields', () => {
     const oldValue = { foo: 'a', blocked: 'a' };
     const newValue = { foo: 'b', blocked: 'a' };
+    expect(() => permission.validateWrite(newValue, oldValue))
+      .not.toThrow();
+  });
+
+  it('allows adding writable fields', () => {
+    const oldValue = { };
+    const newValue = { foo: 'a' };
+    expect(() => permission.validateWrite(newValue, oldValue))
+      .not.toThrow();
+  });
+
+  it('allows removing writable fields', () => {
+    const oldValue = { foo: 'a' };
+    const newValue = { };
     expect(() => permission.validateWrite(newValue, oldValue))
       .not.toThrow();
   });
