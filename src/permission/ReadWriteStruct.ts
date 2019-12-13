@@ -11,7 +11,7 @@ export default class ReadWriteStruct<T extends object> implements Permission<T> 
 
       if (!Object.prototype.hasOwnProperty.call(newValue, key)) {
         if (this.readOnlyFields.includes(key)) {
-          throw new Error(`Cannot remove field ${key}`);
+          throw new PermissionError(`Cannot remove field ${key}`);
         }
       }
     });
@@ -21,7 +21,7 @@ export default class ReadWriteStruct<T extends object> implements Permission<T> 
 
       if (this.readOnlyFields.includes(key)) {
         if (!Object.prototype.hasOwnProperty.call(oldValue, key)) {
-          throw new Error(`Cannot add field ${key}`);
+          throw new PermissionError(`Cannot add field ${key}`);
         }
         if (newValue[key] !== oldValue[key]) {
           throw new PermissionError(`Cannot edit field ${key}`);
