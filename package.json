@@ -36,6 +36,7 @@
     "@neutrinojs/jest": "^9.0.0-rc.5",
     "@neutrinojs/library": "^9.0.0-rc.5",
     "@types/jest": "24.x",
+    "collection-storage": "git+https://github.com/davidje13/collection-storage.git#semver:^1.7.0",
     "eslint": "6.x",
     "jest": "24.x",
     "neutrino": "^9.0.0-rc.5",
