@@ -94,8 +94,8 @@ export class Broadcaster<T> {
     source: Identifier,
     meta: unknown,
   ): Promise<void> {
-    const original = await this.model.read(id);
     try {
+      const original = await this.model.read(id);
       if (!original) {
         throw new Error('Deleted');
       }
