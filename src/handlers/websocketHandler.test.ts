@@ -2,39 +2,13 @@ import type { Server } from 'http';
 import WebSocketExpress from 'websocket-express';
 import request from 'superwstest';
 import websocketHandler from './websocketHandler';
-import InMemoryModel from './model/InMemoryModel';
-import { Broadcaster } from './Broadcaster';
-import ReadWrite from './permission/ReadWrite';
-import ReadOnly from './permission/ReadOnly';
-import ReadWriteStruct from './permission/ReadWriteStruct';
-
-interface TestT {
-  foo: string;
-}
-
-function validateTestT(x: unknown): TestT {
-  const test = x as TestT;
-  if (test.foo === 'denied') {
-    throw new Error('Test rejection');
-  }
-  return test;
-}
-
-class Sentinel {
-  public readonly resolve: () => void;
-
-  private readonly promise: Promise<void>;
-
-  constructor() {
-    let res: () => void;
-    this.promise = new Promise((resolve) => {
-      res = resolve;
-    });
-    this.resolve = res!;
-  }
-
-  public await = (): Promise<void> => this.promise;
-}
+import InMemoryModel from '../model/InMemoryModel';
+import { Broadcaster } from '../Broadcaster';
+import ReadWrite from '../permission/ReadWrite';
+import ReadOnly from '../permission/ReadOnly';
+import ReadWriteStruct from '../permission/ReadWriteStruct';
+import Sentinel from './test-helpers/Sentinel';
+import { TestT, validateTestT } from './test-helpers/TestT';
 
 describe('websocketHandler', () => {
   let app: WebSocketExpress;

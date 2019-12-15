@@ -1,5 +1,5 @@
 import { Broadcaster, Subscription, ChangeInfo, TopicMessage } from './Broadcaster';
-import websocketHandler, { PING, PONG } from './websocketHandler';
+import websocketHandler, { PING, PONG } from './handlers/websocketHandler';
 import UniqueIdProvider from './helpers/UniqueIdProvider';
 import CollectionStorageModel from './model/CollectionStorageModel';
 import Permission, { PermissionError } from './permission/Permission';

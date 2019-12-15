@@ -1,10 +1,13 @@
-import type { WSRequestHandler, WSResponse } from 'websocket-express';
-import type { Request } from 'express';
-// eslint-disable-next-line import/no-unresolved
-import type { Params, ParamsDictionary } from 'express-serve-static-core';
 import type { Spec } from 'json-immutability-helper';
-import type { Broadcaster, ChangeInfo } from './Broadcaster';
-import type Permission from './permission/Permission';
+import type { Request } from 'express';
+import type { WSRequestHandler, WSResponse } from 'websocket-express';
+import { unpackMessage } from './Message';
+import type { Broadcaster, ChangeInfo } from '../Broadcaster';
+import type Permission from '../permission/Permission';
+
+interface ParamsDictionary { [key: string]: string }
+type ParamsArray = string[];
+type Params = ParamsDictionary | ParamsArray;
 
 export const PING = 'P';
 export const PONG = 'p';
@@ -13,31 +16,6 @@ type DataExtractor<T, P extends Params = ParamsDictionary> = (
   req: Request<P>,
   res: WSResponse,
 ) => Promise<T> | T;
-
-interface Message {
-  change: Record<string, unknown>;
-  id?: number;
-}
-
-function unpackMessage(msg: string): Message {
-  // return json.parse(msg, json.object({
-  //   change: json.record,
-  //   id: json.optional(json.number),
-  // }));
-
-  const rawData = JSON.parse(msg);
-  if (!rawData || typeof rawData !== 'object') {
-    throw new Error('Must specify change and optional id');
-  }
-  const { id, change } = rawData;
-  if (!change || typeof change !== 'object' || Array.isArray(change)) {
-    throw new Error('change must be a dictionary');
-  }
-  if (id !== undefined && typeof id !== 'number') {
-    throw new Error('if specified, id must be a number');
-  }
-  return { change, id };
-}
 
 const websocketHandler = <T>(
   broadcaster: Broadcaster<T>,
@@ -71,12 +49,9 @@ const websocketHandler = <T>(
 
     const request = unpackMessage(msg);
 
-    try {
-      res.beginTransaction();
-      subscription.send(request.change as Spec<T>, request.id);
-    } finally {
-      res.endTransaction();
-    }
+    res.beginTransaction();
+    subscription.send(request.change as Spec<T>, request.id)
+      .finally(() => res.endTransaction());
   });
 
   ws.send(JSON.stringify({

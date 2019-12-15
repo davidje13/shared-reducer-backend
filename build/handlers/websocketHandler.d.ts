@@ -1,8 +1,12 @@
-import type { WSRequestHandler, WSResponse } from 'websocket-express';
 import type { Request } from 'express';
-import type { Params, ParamsDictionary } from 'express-serve-static-core';
-import type { Broadcaster } from './Broadcaster';
-import type Permission from './permission/Permission';
+import type { WSRequestHandler, WSResponse } from 'websocket-express';
+import type { Broadcaster } from '../Broadcaster';
+import type Permission from '../permission/Permission';
+interface ParamsDictionary {
+    [key: string]: string;
+}
+declare type ParamsArray = string[];
+declare type Params = ParamsDictionary | ParamsArray;
 export declare const PING = "P";
 export declare const PONG = "p";
 declare type DataExtractor<T, P extends Params = ParamsDictionary> = (req: Request<P>, res: WSResponse) => Promise<T> | T;
