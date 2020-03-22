@@ -1,4 +1,4 @@
-import Model from './Model';
+import type Model from './Model';
 
 // type matches collection-storage
 interface Collection<T extends object> {

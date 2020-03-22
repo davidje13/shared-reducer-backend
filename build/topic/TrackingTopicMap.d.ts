@@ -1,5 +1,5 @@
-import TopicMap from './TopicMap';
-import Topic, { TopicListener } from './Topic';
+import type TopicMap from './TopicMap';
+import type { Topic, TopicListener } from './Topic';
 export default class TrackingTopicMap<T> implements TopicMap<T> {
     private readonly topicFactory;
     private data;

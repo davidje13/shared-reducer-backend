@@ -1,4 +1,4 @@
-import { Spec } from 'json-immutability-helper';
+import type { Spec } from 'json-immutability-helper';
 
 export class PermissionError extends Error {
 }

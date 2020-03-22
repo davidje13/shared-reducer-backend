@@ -1,4 +1,4 @@
-import Model from './Model';
+import type Model from './Model';
 interface Collection<T extends object> {
     get<K extends keyof T & string>(searchAttribute: K, searchValue: T[K]): Promise<Readonly<T> | null>;
     update<K extends keyof T & string>(searchAttribute: K, searchValue: T[K], update: Partial<T>): Promise<void>;

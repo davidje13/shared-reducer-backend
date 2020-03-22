@@ -1,5 +1,5 @@
 import AsyncTaskQueue from './AsyncTaskQueue';
-import { TaskQueue, Task } from './TaskQueue';
+import type { TaskQueue, Task } from './TaskQueue';
 
 export default class TaskQueueMap<T> {
   private readonly queues = new Map<string, TaskQueue<T>>();

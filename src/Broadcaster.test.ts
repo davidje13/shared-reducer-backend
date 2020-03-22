@@ -1,5 +1,5 @@
-import { Spec } from 'json-immutability-helper';
-import Broadcaster, { ChangeInfo, Subscription } from './Broadcaster';
+import type { Spec } from 'json-immutability-helper';
+import { Broadcaster, ChangeInfo, Subscription } from './Broadcaster';
 import InMemoryModel from './model/InMemoryModel';
 
 interface TestT {

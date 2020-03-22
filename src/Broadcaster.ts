@@ -1,12 +1,12 @@
 import update, { Spec } from 'json-immutability-helper';
 import UniqueIdProvider from './helpers/UniqueIdProvider';
 import TaskQueueMap from './task-queue/TaskQueueMap';
-import TopicMap from './topic/TopicMap';
+import type TopicMap from './topic/TopicMap';
 import TrackingTopicMap from './topic/TrackingTopicMap';
 import InMemoryTopic from './topic/InMemoryTopic';
-import Permission from './permission/Permission';
+import type Permission from './permission/Permission';
 import ReadWrite from './permission/ReadWrite';
-import Model from './model/Model';
+import type Model from './model/Model';
 
 export interface Subscription<T, MetaT> {
   getInitialData: () => Readonly<T>;
@@ -30,7 +30,7 @@ export interface TopicMessage<T> {
   meta?: unknown;
 }
 
-export default class Broadcaster<T> {
+export class Broadcaster<T> {
   constructor(
     private readonly model: Model<T>,
     private readonly subscribers: TopicMap<TopicMessage<T>>

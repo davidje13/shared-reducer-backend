@@ -1,4 +1,4 @@
-import Model from './Model';
+import type Model from './Model';
 
 export default class InMemoryModel<T> implements Model<T> {
   public readonly validate: (v: unknown) => T;

@@ -1,9 +1,9 @@
-import { Server } from 'http';
+import type { Server } from 'http';
 import WebSocketExpress from 'websocket-express';
 import request from 'superwstest';
 import websocketHandler from './websocketHandler';
 import InMemoryModel from './model/InMemoryModel';
-import Broadcaster from './Broadcaster';
+import { Broadcaster } from './Broadcaster';
 import ReadWrite from './permission/ReadWrite';
 import ReadOnly from './permission/ReadOnly';
 import ReadWriteStruct from './permission/ReadWriteStruct';

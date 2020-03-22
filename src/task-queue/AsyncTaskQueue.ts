@@ -1,5 +1,5 @@
-import EventEmitter from 'events';
-import { Task, TaskQueue } from './TaskQueue';
+import { EventEmitter } from 'events';
+import type { Task, TaskQueue } from './TaskQueue';
 
 interface QueueItem<T> {
   task: Task<T>;

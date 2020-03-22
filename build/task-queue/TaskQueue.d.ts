@@ -1,4 +1,5 @@
-import EventEmitter from 'events';
+/// <reference types="node" />
+import type { EventEmitter } from 'events';
 export declare type Task<T> = () => Promise<T>;
 export interface TaskQueue<T> extends EventEmitter {
     push(task: Task<T>): Promise<T>;

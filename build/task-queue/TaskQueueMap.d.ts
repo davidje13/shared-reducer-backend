@@ -1,4 +1,4 @@
-import { TaskQueue, Task } from './TaskQueue';
+import type { TaskQueue, Task } from './TaskQueue';
 export default class TaskQueueMap<T> {
     private readonly queueFactory;
     private readonly queues;

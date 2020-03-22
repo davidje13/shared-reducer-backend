@@ -1,4 +1,4 @@
-import Topic, { TopicListener } from './Topic';
+import type { Topic, TopicListener } from './Topic';
 
 export default class InMemoryTopic<T> implements Topic<T> {
   private subscribers = new Set<TopicListener<T>>();

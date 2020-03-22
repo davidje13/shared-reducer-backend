@@ -1,11 +1,10 @@
-import { WSRequestHandler, WSResponse } from 'websocket-express';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { Request } from 'express';
+import type { WSRequestHandler, WSResponse } from 'websocket-express';
+import type { Request } from 'express';
 // eslint-disable-next-line import/no-unresolved
-import { Params, ParamsDictionary } from 'express-serve-static-core';
-import { Spec } from 'json-immutability-helper';
-import Broadcaster, { ChangeInfo } from './Broadcaster';
-import Permission from './permission/Permission';
+import type { Params, ParamsDictionary } from 'express-serve-static-core';
+import type { Spec } from 'json-immutability-helper';
+import type { Broadcaster, ChangeInfo } from './Broadcaster';
+import type Permission from './permission/Permission';
 
 export const PING = 'P';
 export const PONG = 'p';

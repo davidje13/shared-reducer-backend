@@ -1,9 +1,9 @@
 import { Spec } from 'json-immutability-helper';
 import UniqueIdProvider from './helpers/UniqueIdProvider';
 import TaskQueueMap from './task-queue/TaskQueueMap';
-import TopicMap from './topic/TopicMap';
-import Permission from './permission/Permission';
-import Model from './model/Model';
+import type TopicMap from './topic/TopicMap';
+import type Permission from './permission/Permission';
+import type Model from './model/Model';
 export interface Subscription<T, MetaT> {
     getInitialData: () => Readonly<T>;
     send: (change: Spec<T>, meta?: MetaT) => Promise<void>;
@@ -22,7 +22,7 @@ export interface TopicMessage<T> {
     source: Identifier;
     meta?: unknown;
 }
-export default class Broadcaster<T> {
+export declare class Broadcaster<T> {
     private readonly model;
     private readonly subscribers;
     private readonly taskQueues;

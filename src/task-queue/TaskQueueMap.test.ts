@@ -1,6 +1,6 @@
-import EventEmitter from 'events';
+import { EventEmitter } from 'events';
 import TaskQueueMap from './TaskQueueMap';
-import { Task, TaskQueue } from './TaskQueue';
+import type { Task, TaskQueue } from './TaskQueue';
 
 class FakeQueue<T> extends EventEmitter implements TaskQueue<T> {
   public taskCount = 0;
