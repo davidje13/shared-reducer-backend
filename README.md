@@ -62,7 +62,7 @@ const subscription = await broadcaster.subscribe(
 );
 
 const begin = subscription.getInitialData();
-await subscription.send({ $set: { foo: 'v2' } });
+await subscription.send(['=', { foo: 'v2' }]);
 // callback provided earlier is invoked
 
 await subscription.close();
@@ -115,7 +115,7 @@ applied. Other clients will not receive the ID.
 `p` (pong):
 Reponse to a ping. May also be sent unsolicited.
 
-`{"change": {$set: <state>}}`:
+`{"change": ['=', <state>]}`:
 The first message sent by the server, in response to a successful
 connection.
 

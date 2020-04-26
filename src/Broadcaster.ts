@@ -1,4 +1,4 @@
-import update, { Spec } from 'json-immutability-helper';
+import { update, Spec } from 'json-immutability-helper';
 import UniqueIdProvider from './helpers/UniqueIdProvider';
 import TaskQueueMap from './task-queue/TaskQueueMap';
 import type TopicMap from './topic/TopicMap';

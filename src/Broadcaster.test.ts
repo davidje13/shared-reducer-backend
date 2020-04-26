@@ -1,4 +1,3 @@
-import type { Spec } from 'json-immutability-helper';
 import { Broadcaster, ChangeInfo, Subscription } from './Broadcaster';
 import InMemoryModel from './model/InMemoryModel';
 
@@ -48,10 +47,10 @@ describe('Broadcaster', () => {
     model.set('a', { foo: 'v1' });
     const subscription = await subscribe('a', changeListener);
 
-    await broadcaster.update('a', { foo: { $set: 'v2' } });
+    await broadcaster.update('a', { foo: ['=', 'v2'] });
 
     expect(changeListener).toHaveBeenCalledWith(
-      { change: { foo: { $set: 'v2' } } },
+      { change: { foo: ['=', 'v2'] } },
       undefined,
     );
 
@@ -65,7 +64,7 @@ describe('Broadcaster', () => {
 
   it('persists changes to the backing storage', async () => {
     model.set('a', { foo: 'v1' });
-    await broadcaster.update('a', { foo: { $set: 'v2' } });
+    await broadcaster.update('a', { foo: ['=', 'v2'] });
 
     expect(model.get('a')).toEqual({ foo: 'v2' });
   });
@@ -93,14 +92,14 @@ describe('Broadcaster', () => {
     const changeListener2 = jest.fn<void, ChangeParams>();
     const subscription2 = await subscribe('a', changeListener2);
 
-    await subscription1.send({ foo: { $set: 'v2' } }, 20);
+    await subscription1.send({ foo: ['=', 'v2'] }, 20);
 
     expect(changeListener1).toHaveBeenCalledWith(
-      { change: { foo: { $set: 'v2' } } },
+      { change: { foo: ['=', 'v2'] } },
       20,
     );
     expect(changeListener2).toHaveBeenCalledWith(
-      { change: { foo: { $set: 'v2' } } },
+      { change: { foo: ['=', 'v2'] } },
       undefined,
     );
 
@@ -119,7 +118,7 @@ describe('Broadcaster', () => {
 
     await subscription1.close();
 
-    await subscription2.send({ foo: { $set: 'v2' } }, 20);
+    await subscription2.send({ foo: ['=', 'v2'] }, 20);
     expect(changeListener1).not.toHaveBeenCalled();
     expect(changeListener2).toHaveBeenCalled();
 
@@ -135,7 +134,8 @@ describe('Broadcaster', () => {
     const changeListener2 = jest.fn<void, ChangeParams>();
     const subscription2 = await subscribe('a', changeListener2);
 
-    await subscription1.send({ $set: 'eek' } as Spec<TestT>, 20);
+    const invalidType = 'eek' as unknown as TestT;
+    await subscription1.send(['=', invalidType], 20);
 
     expect(changeListener1).toHaveBeenCalledWith(
       { error: 'should be an object' },

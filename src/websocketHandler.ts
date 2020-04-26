@@ -80,7 +80,7 @@ const websocketHandler = <T>(
   });
 
   ws.send(JSON.stringify({
-    change: { $set: subscription.getInitialData() },
+    change: ['=', subscription.getInitialData()],
   }));
 };
 

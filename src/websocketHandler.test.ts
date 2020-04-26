@@ -68,7 +68,7 @@ describe('websocketHandler', () => {
 
     await request(server)
       .ws('/a')
-      .expectJson({ change: { $set: { foo: 'v1' } } });
+      .expectJson({ change: ['=', { foo: 'v1' }] });
   });
 
   it('reflects changes', async () => {
@@ -78,8 +78,8 @@ describe('websocketHandler', () => {
     await request(server)
       .ws('/a')
       .expectJson()
-      .sendJson({ change: { foo: { $set: 'v2' } } })
-      .expectJson({ change: { foo: { $set: 'v2' } } });
+      .sendJson({ change: { foo: ['=', 'v2'] } })
+      .expectJson({ change: { foo: ['=', 'v2'] } });
   });
 
   it('rejects changes in read-only mode', async () => {
@@ -89,7 +89,7 @@ describe('websocketHandler', () => {
     await request(server)
       .ws('/a')
       .expectJson()
-      .sendJson({ change: { foo: { $set: 'v2' } } })
+      .sendJson({ change: { foo: ['=', 'v2'] } })
       .expectJson({ error: 'Cannot modify data' });
   });
 
@@ -100,7 +100,7 @@ describe('websocketHandler', () => {
     await request(server)
       .ws('/a')
       .expectJson()
-      .sendJson({ change: { foo: { $set: 'v2' } } })
+      .sendJson({ change: { foo: ['=', 'v2'] } })
       .expectJson({ error: 'Cannot edit field foo' });
   });
 
@@ -111,7 +111,7 @@ describe('websocketHandler', () => {
     await request(server)
       .ws('/a')
       .expectJson()
-      .sendJson({ change: { foo: { $set: 'denied' } } })
+      .sendJson({ change: { foo: ['=', 'denied'] } })
       .expectJson({ error: 'Test rejection' });
   });
 
@@ -122,8 +122,8 @@ describe('websocketHandler', () => {
     await request(server)
       .ws('/a')
       .expectJson()
-      .sendJson({ change: { foo: { $set: 'v2' } }, id: 20 })
-      .expectJson({ change: { foo: { $set: 'v2' } }, id: 20 });
+      .sendJson({ change: { foo: ['=', 'v2'] }, id: 20 })
+      .expectJson({ change: { foo: ['=', 'v2'] }, id: 20 });
   });
 
   it('sends updates to other subscribers without id field', async () => {
@@ -135,20 +135,20 @@ describe('websocketHandler', () => {
     await Promise.all([
       request(server)
         .ws('/a')
-        .expectJson({ change: { $set: { foo: 'v1' } } })
+        .expectJson({ change: ['=', { foo: 'v1' }] })
         .exec(sentinel.await)
-        .sendJson({ change: { foo: { $set: 'v2' } }, id: 20 })
-        .expectJson({ change: { foo: { $set: 'v2' } }, id: 20 }),
+        .sendJson({ change: { foo: ['=', 'v2'] }, id: 20 })
+        .expectJson({ change: { foo: ['=', 'v2'] }, id: 20 }),
 
       request(server)
         .ws('/a')
-        .expectJson({ change: { $set: { foo: 'v1' } } })
+        .expectJson({ change: ['=', { foo: 'v1' }] })
         .exec(sentinel.resolve)
-        .expectJson({ change: { foo: { $set: 'v2' } } }),
+        .expectJson({ change: { foo: ['=', 'v2'] } }),
     ]);
 
     await request(server)
       .ws('/a')
-      .expectJson({ change: { $set: { foo: 'v2' } } });
+      .expectJson({ change: ['=', { foo: 'v2' }] });
   });
 });
