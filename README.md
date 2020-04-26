@@ -5,7 +5,7 @@ Shared state management via websockets.
 ## Install dependency
 
 ```bash
-npm install --save git+https://github.com/davidje13/shared-reducer-backend.git#semver:^1.1.3
+npm install --save git+https://github.com/davidje13/shared-reducer-backend.git#semver:^2.0.0
 ```
 
 ## Usage
@@ -131,3 +131,8 @@ Sent if the server rejects a client-initiated change.
 
 If this is returned, the server state will not have changed (i.e. the
 entire spec failed).
+
+### Specs
+
+The specs should match the format of
+[json-immutability-helper](https://github.com/davidje13/json-immutability-helper).
