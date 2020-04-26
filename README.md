@@ -5,7 +5,7 @@ Shared state management via websockets.
 ## Install dependency
 
 ```bash
-npm install --save git+https://github.com/davidje13/shared-reducer-backend.git#semver:^2.0.0
+npm install --save git+https://github.com/davidje13/shared-reducer-backend.git#semver:^2.0.1
 ```
 
 ## Usage
