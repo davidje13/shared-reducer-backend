@@ -1,7 +1,7 @@
 import type Model from './Model';
 
 // type matches collection-storage
-interface Collection<T extends object> {
+interface Collection<T> {
   get<K extends keyof T & string>(
     searchAttribute: K,
     searchValue: T[K],
@@ -16,7 +16,7 @@ interface Collection<T extends object> {
 
 const ERROR_NOP = (e: Error): Error => e;
 
-export default class CollectionStorageModel<T extends object> implements Model<T> {
+export default class CollectionStorageModel<T> implements Model<T> {
   public readonly validate: (v: unknown) => T;
 
   constructor(

@@ -1,9 +1,9 @@
 import type Model from './Model';
-interface Collection<T extends object> {
+interface Collection<T> {
     get<K extends keyof T & string>(searchAttribute: K, searchValue: T[K]): Promise<Readonly<T> | null>;
     update<K extends keyof T & string>(searchAttribute: K, searchValue: T[K], update: Partial<T>): Promise<void>;
 }
-export default class CollectionStorageModel<T extends object> implements Model<T> {
+export default class CollectionStorageModel<T> implements Model<T> {
     private readonly collection;
     private readonly idCol;
     private readonly readErrorIntercept;

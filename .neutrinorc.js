@@ -1,8 +1,8 @@
 const airbnbBase = require('@neutrinojs/airbnb-base');
 const library = require('@neutrinojs/library');
 const jest = require('@neutrinojs/jest');
-const typescript = require('neutrino-typescript');
-const typescriptLint = require('neutrino-typescript-eslint');
+const typescript = require('neutrinojs-typescript');
+const typescriptLint = require('neutrinojs-typescript-eslint');
 
 module.exports = {
   options: {
@@ -19,7 +19,6 @@ module.exports = {
           'operator-linebreak': ['error', 'after'],
           '@typescript-eslint/indent': ['error', 2],
           '@typescript-eslint/await-thenable': ['error'],
-          '@typescript-eslint/ban-ts-ignore': ['error'],
           '@typescript-eslint/member-ordering': ['error'],
           '@typescript-eslint/no-for-in-array': ['error'],
           '@typescript-eslint/no-require-imports': ['error'],
