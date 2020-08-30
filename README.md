@@ -8,7 +8,7 @@ Designed to work with
 ## Install dependency
 
 ```bash
-npm install --save git+https://github.com/davidje13/shared-reducer-backend.git#semver:^2.0.1
+npm install --save shared-reducer-backend
 ```
 
 ## Usage
