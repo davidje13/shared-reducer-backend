@@ -57,5 +57,22 @@ describe('CollectionStorageModel', () => {
       const value = await collection.get('id', 'abc');
       expect(value).toEqual({ id: 'abc', foo: 6 });
     });
+
+    it('avoids prototype access', async () => {
+      /* eslint-disable no-proto, @typescript-eslint/no-explicit-any */
+      const spy = jest.spyOn(collection, 'update').mockResolvedValue();
+
+      await model.write(
+        'abc',
+        JSON.parse('{"id":"x","foo":3,"__proto__":{"injected":"gotchya"}}'),
+        { id: 'abc', foo: 2 },
+      );
+
+      expect(spy).toHaveBeenCalled();
+      const diff = spy.mock.calls[0][2] as any;
+      expect(diff.injected).toBeUndefined();
+      expect(diff.__proto__.injected).toEqual('gotchya');
+      /* eslint-enable no-proto, @typescript-eslint/no-explicit-any */
+    });
   });
 });

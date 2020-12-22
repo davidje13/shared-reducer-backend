@@ -4,7 +4,7 @@ export default interface Message {
 }
 
 function isObject(o: unknown): o is Record<string, unknown> {
-  return typeof o === 'object' && Boolean(o);
+  return typeof o === 'object' && o !== null && !Array.isArray(o);
 }
 
 export function validateMessage(rawData: unknown): Message {
@@ -12,7 +12,7 @@ export function validateMessage(rawData: unknown): Message {
     throw new Error('Must specify change and optional id');
   }
   const { id, change } = rawData;
-  if (!isObject(change) || Array.isArray(change)) {
+  if (!isObject(change)) {
     throw new Error('change must be a dictionary');
   }
   if (id !== undefined && typeof id !== 'number') {

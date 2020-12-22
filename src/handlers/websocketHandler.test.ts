@@ -1,4 +1,5 @@
 import type { Server } from 'http';
+import context, { Spec } from 'json-immutability-helper';
 import WebSocketExpress from 'websocket-express';
 import request from 'superwstest';
 import websocketHandler from './websocketHandler';
@@ -14,12 +15,14 @@ describe('websocketHandler', () => {
   let app: WebSocketExpress;
   let server: Server;
   let model: InMemoryModel<TestT>;
-  let broadcaster: Broadcaster<TestT>;
+  let broadcaster: Broadcaster<TestT, Spec<TestT>>;
 
   beforeEach((done) => {
     app = new WebSocketExpress();
     model = new InMemoryModel(validateTestT);
-    broadcaster = new Broadcaster<TestT>(model);
+    broadcaster = Broadcaster.for(model)
+      .withReducer<Spec<TestT>>(context)
+      .build();
     server = app.listen(0, 'localhost', done);
 
     model.set('a', { foo: 'v1' });
@@ -42,7 +45,7 @@ describe('websocketHandler', () => {
 
     await request(server)
       .ws('/a')
-      .expectJson({ change: ['=', { foo: 'v1' }] });
+      .expectJson({ init: { foo: 'v1' } });
   });
 
   it('reflects changes', async () => {
@@ -109,20 +112,20 @@ describe('websocketHandler', () => {
     await Promise.all([
       request(server)
         .ws('/a')
-        .expectJson({ change: ['=', { foo: 'v1' }] })
+        .expectJson({ init: { foo: 'v1' } })
         .exec(sentinel.await)
         .sendJson({ change: { foo: ['=', 'v2'] }, id: 20 })
         .expectJson({ change: { foo: ['=', 'v2'] }, id: 20 }),
 
       request(server)
         .ws('/a')
-        .expectJson({ change: ['=', { foo: 'v1' }] })
+        .expectJson({ init: { foo: 'v1' } })
         .exec(sentinel.resolve)
         .expectJson({ change: { foo: ['=', 'v2'] } }),
     ]);
 
     await request(server)
       .ws('/a')
-      .expectJson({ change: ['=', { foo: 'v2' }] });
+      .expectJson({ init: { foo: 'v2' } });
   });
 });

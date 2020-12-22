@@ -1,6 +1,6 @@
 import Permission, { PermissionError } from './Permission';
 
-export default class ReadWriteStruct<T> implements Permission<T> {
+export default class ReadWriteStruct<T> implements Permission<T, unknown> {
   constructor(
     private readonly readOnlyFields: (keyof T)[] = [],
   ) {}

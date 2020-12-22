@@ -1,4 +1,3 @@
-import type { Spec } from 'json-immutability-helper';
 import type { Request } from 'express';
 import type { WSRequestHandler, WSResponse } from 'websocket-express';
 import { unpackMessage } from './Message';
@@ -17,15 +16,15 @@ type DataExtractor<T, P extends Params = ParamsDictionary> = (
   res: WSResponse,
 ) => Promise<T> | T;
 
-const websocketHandler = <T>(
-  broadcaster: Broadcaster<T>,
+const websocketHandler = <T, SpecT>(
+  broadcaster: Broadcaster<T, SpecT>,
 ) => <P extends Params = ParamsDictionary>(
   idGetter: DataExtractor<string, P>,
-  permissionGetter: DataExtractor<Permission<T>, P>,
+  permissionGetter: DataExtractor<Permission<T, SpecT>, P>,
 ): WSRequestHandler<P> => async (req, res): Promise<void> => {
   const ws = await res.accept();
 
-  const onChange = (msg: ChangeInfo<T>, id?: number): void => {
+  const onChange = (msg: ChangeInfo<SpecT>, id?: number): void => {
     const data = (id !== undefined) ? { id, ...msg } : msg;
     ws.send(JSON.stringify(data));
   };
@@ -50,12 +49,12 @@ const websocketHandler = <T>(
     const request = unpackMessage(msg);
 
     res.beginTransaction();
-    subscription.send(request.change as Spec<T>, request.id)
+    subscription.send(request.change as SpecT, request.id)
       .finally(() => res.endTransaction());
   });
 
   ws.send(JSON.stringify({
-    change: ['=', subscription.getInitialData()],
+    init: subscription.getInitialData(),
   }));
 };
 

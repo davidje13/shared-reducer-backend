@@ -1,6 +1,9 @@
 import type Model from './Model';
 
 export default class InMemoryModel<T> implements Model<T> {
+  /* eslint-disable-next-line @typescript-eslint/unbound-method */
+  public readonly read = this.get;
+
   public readonly validate: (v: unknown) => T;
 
   private readonly memory = new Map<string, T>();
@@ -13,16 +16,12 @@ export default class InMemoryModel<T> implements Model<T> {
     this.memory.set(id, value);
   }
 
-  public get(id: string): T | undefined {
+  public get(id: string): Readonly<T> | undefined {
     return this.memory.get(id);
   }
 
   public delete(id: string): void {
     this.memory.delete(id);
-  }
-
-  public read(id: string): Readonly<T> | null {
-    return this.memory.get(id) ?? null;
   }
 
   public write(id: string, newValue: T, oldValue: T): void {

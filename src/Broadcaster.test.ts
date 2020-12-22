@@ -1,3 +1,4 @@
+import context, { Spec } from 'json-immutability-helper';
 import { Broadcaster, ChangeInfo, Subscription } from './Broadcaster';
 import InMemoryModel from './model/InMemoryModel';
 
@@ -19,21 +20,23 @@ function validateTestT(x: unknown): TestT {
   return test;
 }
 
-type ChangeParams = [ChangeInfo<TestT>, number?];
+type ChangeParams = [ChangeInfo<Spec<TestT>>, number?];
 
 describe('Broadcaster', () => {
   let model: InMemoryModel<TestT>;
-  let broadcaster: Broadcaster<TestT>;
+  let broadcaster: Broadcaster<TestT, Spec<TestT>>;
 
   beforeEach(() => {
     model = new InMemoryModel(validateTestT);
-    broadcaster = new Broadcaster<TestT>(model);
+    broadcaster = Broadcaster.for(model)
+      .withReducer<Spec<TestT>>(context)
+      .build();
   });
 
   async function subscribe<MetaT>(
     id: string,
-    onChange: (message: ChangeInfo<TestT>, meta?: MetaT) => void,
-  ): Promise<Subscription<TestT, MetaT>> {
+    onChange: (message: ChangeInfo<Spec<TestT>>, meta?: MetaT) => void,
+  ): Promise<Subscription<TestT, Spec<TestT>, MetaT>> {
     const subscription = await broadcaster.subscribe(id, onChange);
     if (!subscription) {
       throw new Error('Failed to subscribe');

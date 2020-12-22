@@ -1,1 +1,1 @@
-{"version":3,"file":"ReadWrite.d.ts","sourceRoot":"","sources":["../../src/permission/ReadWrite.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,UAAU,MAAM,cAAc,CAAC;AAG3C,QAAA,MAAM,SAAS,EAAE,UAAU,CAAC,GAAG,CAI9B,CAAC;AAEF,eAAe,SAAS,CAAC"}
+{"version":3,"file":"ReadWrite.d.ts","sourceRoot":"","sources":["../../src/permission/ReadWrite.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,UAAU,MAAM,cAAc,CAAC;AAE3C,QAAA,MAAM,SAAS,EAAE,UAAU,CAAC,OAAO,EAAE,OAAO,CAI3C,CAAC;AAEF,eAAe,SAAS,CAAC"}

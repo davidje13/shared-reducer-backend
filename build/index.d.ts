@@ -1,5 +1,4 @@
-import type { Spec } from 'json-immutability-helper';
-import { Broadcaster, Subscription, ChangeInfo, TopicMessage } from './Broadcaster';
+import { Broadcaster, Context, Subscription, ChangeInfo, TopicMessage } from './Broadcaster';
 import websocketHandler, { PING, PONG } from './handlers/websocketHandler';
 import UniqueIdProvider from './helpers/UniqueIdProvider';
 import CollectionStorageModel from './model/CollectionStorageModel';
@@ -16,6 +15,6 @@ import type Model from './model/Model';
 import type { Task, TaskQueue, TaskQueueFactory } from './task-queue/TaskQueue';
 import type { Topic } from './topic/Topic';
 import type TopicMap from './topic/TopicMap';
-export type { Spec, Subscription, ChangeInfo, TopicMessage, Model, Permission, Task, TaskQueue, TaskQueueFactory, Topic, TopicMap, };
+export type { Context, Subscription, ChangeInfo, TopicMessage, Model, Permission, Task, TaskQueue, TaskQueueFactory, Topic, TopicMap, };
 export { Broadcaster, websocketHandler, PING, PONG, InMemoryModel, CollectionStorageModel, PermissionError, ReadOnly, ReadWrite, ReadWriteStruct, AsyncTaskQueue, TaskQueueMap, InMemoryTopic, TrackingTopicMap, UniqueIdProvider, };
 //# sourceMappingURL=index.d.ts.map

@@ -25,10 +25,10 @@ describe('InMemoryModel', () => {
       expect(data.read('a')).toEqual(1);
     });
 
-    it('returns null for unknown keys', () => {
+    it('returns undefined for unknown keys', () => {
       const data = new InMemoryModel<number>();
 
-      expect(data.read('a')).toEqual(null);
+      expect(data.read('a')).toEqual(undefined);
     });
   });
 
@@ -56,7 +56,7 @@ describe('InMemoryModel', () => {
       data.set('a', 1);
       data.set('b', 2);
       data.delete('a');
-      expect(data.read('a')).toEqual(null);
+      expect(data.read('a')).toEqual(undefined);
       expect(data.read('b')).toEqual(2);
     });
   });

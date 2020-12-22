@@ -40,10 +40,20 @@ export default class CollectionStorageModel<T> implements Model<T> {
 
   public async write(id: string, newValue: T, oldValue: T): Promise<void> {
     const diff: Partial<T> = {};
-    Object.keys(newValue).forEach((k) => {
+    Object.entries(newValue).forEach(([k, value]) => {
       const key = k as keyof T & string;
-      if (newValue[key] !== oldValue[key]) {
-        diff[key] = newValue[key];
+      const old = Object.prototype.hasOwnProperty.call(oldValue, key) ? oldValue[key] : undefined;
+      if (value !== old) {
+        if (diff[key]) {
+          Object.defineProperty(diff, key, {
+            value,
+            configurable: true,
+            enumerable: true,
+            writable: true,
+          });
+        } else {
+          diff[key] = value;
+        }
       }
     });
 

@@ -1,6 +1,6 @@
-import type { Spec } from 'json-immutability-helper';
 import {
   Broadcaster,
+  Context,
   Subscription,
   ChangeInfo,
   TopicMessage,
@@ -23,7 +23,7 @@ import type { Topic } from './topic/Topic';
 import type TopicMap from './topic/TopicMap';
 
 export type {
-  Spec,
+  Context,
   Subscription,
   ChangeInfo,
   TopicMessage,
