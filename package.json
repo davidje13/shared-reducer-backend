@@ -40,7 +40,7 @@
     "eslint": "7.x",
     "jest": "26.x",
     "json-immutability-helper": "3.x",
-    "neutrino": "9.3.x",
+    "neutrino": "9.x",
     "neutrinojs-typescript": "1.x",
     "neutrinojs-typescript-eslint": "1.x",
     "superwstest": "1.x",
