@@ -42,7 +42,7 @@ describe('TaskQueueMap', () => {
     }
 
     expect(capturedError).not.toEqual(null);
-    expect(capturedError.message).toEqual('nope');
+    expect((capturedError as Error).message).toEqual('nope');
   });
 
   it('maintains separate queues for each key', () => {

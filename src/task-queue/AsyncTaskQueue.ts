@@ -32,8 +32,8 @@ export default class AsyncTaskQueue<T> extends EventEmitter implements TaskQueue
         /* eslint-disable-next-line no-await-in-loop */ // intentionally serial
         result = await task();
         success = true;
-      } catch (e) {
-        reject(e);
+      } catch (e: unknown) {
+        reject(e as Error);
       }
       if (success) {
         resolve(result!);

@@ -35,7 +35,7 @@ describe('AsyncTaskQueue', () => {
     const queue = new AsyncTaskQueue();
 
     const result = await queue.push(async () => {
-      await new Promise((resolve): void => resolve());
+      await new Promise<void>((resolve): void => resolve());
       return 3;
     });
 
@@ -48,7 +48,7 @@ describe('AsyncTaskQueue', () => {
     let capturedError = null;
     try {
       await queue.push(async () => {
-        await new Promise((resolve): void => resolve());
+        await new Promise<void>((resolve): void => resolve());
         throw new Error('nope');
       });
     } catch (e) {
@@ -56,7 +56,7 @@ describe('AsyncTaskQueue', () => {
     }
 
     expect(capturedError).not.toEqual(null);
-    expect(capturedError.message).toEqual('nope');
+    expect((capturedError as Error).message).toEqual('nope');
   });
 
   it('waits for previous tasks before beginning new tasks', async () => {

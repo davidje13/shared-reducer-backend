@@ -40,7 +40,12 @@ const websocketHandler = <T, SpecT>(
 
   ws.on('close', subscription.close);
 
-  ws.on('message', (msg: string) => {
+  ws.on('message', (data: string | Buffer, isBinary?: boolean) => {
+    if (isBinary) {
+      return; // ignore
+    }
+
+    const msg = String(data);
     if (msg === PING) {
       ws.send(PONG);
       return;

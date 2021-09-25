@@ -168,9 +168,9 @@ export class Broadcaster<T, SpecT> {
       permission.validateWrite(validatedUpdate, original);
 
       await this.model.write(id, validatedUpdate, original);
-    } catch (e) {
+    } catch (e: unknown) {
       this.subscribers.broadcast(id, {
-        message: { error: e.message },
+        message: { error: (e instanceof Error) ? e.message : 'Internal error' },
         source,
         meta,
       });

@@ -33,8 +33,8 @@ export default class CollectionStorageModel<T> implements Model<T> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return await this.collection.get(this.idCol, id as any);
-    } catch (e) {
-      throw this.readErrorIntercept(e);
+    } catch (e: unknown) {
+      throw this.readErrorIntercept(e as Error);
     }
   }
 
@@ -60,8 +60,8 @@ export default class CollectionStorageModel<T> implements Model<T> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await this.collection.update(this.idCol, id as any, diff);
-    } catch (e) {
-      throw this.writeErrorIntercept(e);
+    } catch (e: unknown) {
+      throw this.writeErrorIntercept(e as Error);
     }
   }
 }
