@@ -1,5 +1,13 @@
 # Shared Reducer Backend
 
+**This project has moved**
+
+The new project is `shared-reducer`, and can be found on
+[GitHub](https://github.com/davidje13/shared-reducer) and
+[GitLab](https://gitlab.com/davidje13/shared-reducer)
+
+---
+
 Shared state management via websockets.
 
 Designed to work with
